@@ -47,6 +47,11 @@
                                     <input type="hidden" name="study_material_id" value="{{ $material->id }}">
                                     <button type="submit" class="text-xs text-green-400 hover:text-green-300" title="Gerar Podcast">Podcast</button>
                                 </form>
+                                <form method="POST" action="{{ route('study.materials.destroy', $material) }}" onsubmit="return confirm('Excluir este material?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-xs text-red-400 hover:text-red-300" title="Excluir Material">Excluir</button>
+                                </form>
                             </div>
                         </div>
                     </div>

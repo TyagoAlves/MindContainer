@@ -57,8 +57,6 @@ class StudyMaterialController extends Controller
     {
         $this->authorizeAccess($material);
 
-        $userId = $material->user_id;
-
         if ($material->file_path) {
             Storage::disk('public')->delete($material->file_path);
         }
@@ -75,11 +73,6 @@ class StudyMaterialController extends Controller
                 Storage::disk('public')->delete($podcast->audio_path);
             }
             $podcast->delete();
-        }
-
-        $userStorageDir = storage_path("app/public/users/{$userId}");
-        if (is_dir($userStorageDir)) {
-            \Illuminate\Support\Facades\File::cleanDirectory($userStorageDir);
         }
 
         $material->delete();

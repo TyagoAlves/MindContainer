@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="backdrop-blur-xl bg-gray-900/80 border-b border-white/10" style="isolation: isolate;">
+<nav x-data="{ open: false }" class="bg-gray-900/95 backdrop-blur-xl border-b border-white/10" style="position: relative; z-index: 50;">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">

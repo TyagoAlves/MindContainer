@@ -26,6 +26,14 @@
                 @endif
             </div>
 
+            <div class="flex justify-end">
+                <form method="POST" action="{{ route('study.materials.destroy', $material) }}" onsubmit="return confirm('Excluir este material? Todo o conteúdo gerado (quizzes, slides, podcasts) também será removido.')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="px-4 py-2 text-xs font-semibold uppercase text-red-400 border border-red-900/50 rounded-lg hover:bg-red-900/20 transition">Excluir Material</button>
+                </form>
+            </div>
+
             <div class="grid grid-cols-3 gap-4">
                 <form method="POST" action="{{ route('study.quizzes.generate') }}">
                     @csrf
