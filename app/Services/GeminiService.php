@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class GeminiService
 {
-    private string $apiKey;
+    private ?string $apiKey;
     private string $apiUrl;
 
     public function __construct()
