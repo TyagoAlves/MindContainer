@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Process;
 
 class OpenCodeController extends Controller
 {
@@ -196,6 +195,25 @@ class OpenCodeController extends Controller
 
     private function runProcess(string $code, string $language): string
     {
+        $dangerousPatterns = [
+            'rm\s+-rf\s+/', 'mkfs\.', 'dd\s+if=', '>:/\s*dev/', 'fdisk',
+            'chmod\s+777\s+/', 'chown\s+.*\s+/', 'mv\s+\/\w+\s+\/\w+',
+        ];
+
+        if ($language === 'bash' || $language === 'sh') {
+            foreach ($dangerousPatterns as $pattern) {
+                if (preg_match('/' . $pattern . '/i', $code)) {
+                    return "Erro: comando bloqueado por segurança.";
+                }
+            }
+            if (mb_strlen($code) > 2000) {
+                return "Erro: script muito longo para execução segura.";
+            }
+        }
+
+        $maxExecutionTime = ini_get('max_execution_time') ?: 30;
+        set_time_limit(min($maxExecutionTime, 15));
+
         $tmpDir = sys_get_temp_dir();
         $tmpFile = $tmpDir . '/opencode_' . uniqid() . '.' . ($language === 'python' ? 'py' : ($language === 'js' ? 'js' : 'php'));
 
@@ -207,14 +225,13 @@ class OpenCodeController extends Controller
         }
 
         $command = match ($language) {
-            'python', 'py' => "python3 " . escapeshellarg($tmpFile) . " 2>&1",
-            'javascript', 'js' => "node " . escapeshellarg($tmpFile) . " 2>&1",
-            'bash', 'sh' => "bash " . escapeshellarg($tmpFile) . " 2>&1",
-            default => "php " . escapeshellarg($tmpFile) . " 2>&1",
+            'python', 'py' => "timeout 10 python3 " . escapeshellarg($tmpFile) . " 2>&1",
+            'javascript', 'js' => "timeout 10 node " . escapeshellarg($tmpFile) . " 2>&1",
+            'bash', 'sh' => "timeout 10 bash " . escapeshellarg($tmpFile) . " 2>&1",
+            default => "timeout 10 php " . escapeshellarg($tmpFile) . " 2>&1",
         };
 
         $output = shell_exec($command);
-
         $output = mb_convert_encoding($output ?? '', 'UTF-8', 'UTF-8');
 
         unlink($tmpFile);
@@ -223,7 +240,12 @@ class OpenCodeController extends Controller
             return "Código executado (sem saída).";
         }
 
-        return "Saída da execução:\n" . trim($output);
+        $output = trim($output);
+        if (mb_strlen($output) > 5000) {
+            $output = mb_substr($output, 0, 5000) . "\n... (truncado, max 5000 chars)";
+        }
+
+        return "Saída da execução:\n" . $output;
     }
 
     public function index()

@@ -48,8 +48,6 @@ class MonitorDisk extends Command
     private function preventiveCleanup(): void
     {
         shell_exec('docker system prune -af --volumes 2>/dev/null');
-        shell_exec('sudo apt-get clean 2>/dev/null || sudo dnf clean all 2>/dev/null');
-        shell_exec('sudo journalctl --vacuum-time=3d 2>/dev/null');
 
         $this->call('optimize:clear');
         $this->call('view:clear');
@@ -61,8 +59,6 @@ class MonitorDisk extends Command
     {
         $this->preventiveCleanup();
 
-        shell_exec('sudo journalctl --vacuum-size=100M 2>/dev/null');
-        shell_exec('sudo rm -rf /tmp/* 2>/dev/null');
         shell_exec('docker rm $(docker ps -aq --filter status=exited) 2>/dev/null');
         shell_exec('docker rmi $(docker images --filter dangling=true -q) 2>/dev/null');
 

@@ -88,7 +88,7 @@
                         <p class="text-3xl mb-2">🤖</p>
                         <p class="text-lg font-medium text-indigo-300 group-hover:text-indigo-200 transition">OpenCode Assistente</p>
                         <p class="text-gray-500 text-sm mt-1">Peça ajuda com código, gere quizzes, execute scripts</p>
-                        <span class="inline-block mt-3 text-xs text-indigo-400/60 group-hover:text-indigo-400 transition">Abir →</span>
+                        <span class="inline-block mt-3 text-xs text-indigo-400/60 group-hover:text-indigo-400 transition">Abrir →</span>
                     </a>
                 </div>
             </div>

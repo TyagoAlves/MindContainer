@@ -62,7 +62,7 @@ class TtsService
                     ->get($url, $params);
 
                 if ($response->successful()) {
-                    $partPath = "podcasts/part_{$i}_{$outputPath}";
+                    $partPath = "podcasts/part_{$i}_" . basename($outputPath);
                     Storage::disk($this->disk)->put($partPath, $response->body());
                     $audioParts[] = Storage::disk($this->disk)->path($partPath);
                 }

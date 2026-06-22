@@ -21,7 +21,7 @@ class StudyMaterialController extends Controller
             'title' => 'required|string|max:255',
             'subject_id' => 'nullable|exists:subjects,id',
             'content' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf,txt,epub|max:10240',
+            'file' => 'nullable|file|mimes:txt|max:10240',
         ]);
 
         $data = [

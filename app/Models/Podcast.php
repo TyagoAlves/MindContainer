@@ -9,6 +9,13 @@ class Podcast extends Model
 {
     protected $fillable = ['user_id', 'study_material_id', 'title', 'script', 'audio_path', 'duration_seconds'];
 
+    protected function casts(): array
+    {
+        return [
+            'duration_seconds' => 'integer',
+        ];
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
