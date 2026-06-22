@@ -52,6 +52,7 @@ class OpenCodeController extends Controller
 
     private function localChatResponse(string $message): string
     {
+        $message = strtolower($message);
         $keywords = [
             'ola' => 'Olá! Como posso ajudar você com seus estudos ou código hoje?',
             'oi' => 'Olá! Como posso ajudar você com seus estudos ou código hoje?',
