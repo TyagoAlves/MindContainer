@@ -52,7 +52,11 @@ class OpenCodeController extends Controller
 
     private function localChatResponse(string $message): string
     {
-        $message = strtolower($message);
+        $message = strtolower(str_replace(
+            ['á', 'à', 'â', 'ã', 'ä', 'é', 'è', 'ê', 'ë', 'í', 'ì', 'î', 'ï', 'ó', 'ò', 'ô', 'õ', 'ö', 'ú', 'ù', 'û', 'ü', 'ç', 'ñ'],
+            ['a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'c', 'n'],
+            $message
+        ));
         $keywords = [
             'ola' => 'Olá! Como posso ajudar você com seus estudos ou código hoje?',
             'oi' => 'Olá! Como posso ajudar você com seus estudos ou código hoje?',
